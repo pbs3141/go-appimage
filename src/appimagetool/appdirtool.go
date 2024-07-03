@@ -655,14 +655,10 @@ func handleGdk(appdir helpers.AppDir) {
 						os.Exit(1)
 					}
 
-					whatToPatchAway := helpers.FilesWithSuffixInDirectoryRecursive(loc, "libpixbufloader-png.so")
-					if len(whatToPatchAway) < 1 {
-						helpers.PrintError("whatToPatchAway", errors.New("could not find directory that contains libpixbufloader-png.so"))
-						break // os.Exit(1)
-					}
+					whatToPatchAway := filepath.Dir(loadersCaches[0]) + "/loaders/"
 
-					log.Println("Patching", appdir.Path+loadersCaches[0], "removing", filepath.Dir(whatToPatchAway[0])+"/")
-					err = PatchFile(appdir.Path+loadersCaches[0], filepath.Dir(whatToPatchAway[0])+"/", "")
+					log.Println("Patching", appdir.Path+loadersCaches[0], "removing", whatToPatchAway)
+					err = PatchFile(appdir.Path+loadersCaches[0], whatToPatchAway, "")
 					if err != nil {
 						helpers.PrintError("PatchFile loaders.cache", err)
 						break // os.Exit(1)
